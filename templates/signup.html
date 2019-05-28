@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+<!-- 페이지 상단 네이밍 -->
+{% block title %}Order_Signup{% endblock %}
+<!-- base 파일 기반 body란 block을 채워서 사용 -->
+{% block body %}
+<div class="container">
+  <form method="post" action="" class="form-signin">
+    {% csrf_token %}
+    <h2 class="form-signin-heading">Please sign up</h2>
+    <input type="text" name="username"
+      class="form-control" placeholder="Username" required="" autofocus="">
+    <input type="email" name="email"
+      class="form-control" placeholder="Email address" required="">
+    <input type="password" name="password"
+      class="form-control" placeholder="Password" required="">
+    <button class="btn btn-lg btn-primary btn-block" type="submit">
+      Sign up</button>
+  </form>
+</div>
+{% endblock %}
