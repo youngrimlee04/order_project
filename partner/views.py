@@ -9,7 +9,7 @@ from .forms import PartnerForm
 
 # Create your views here.
 # 장고에서 views.py에서 사용하도록 request라는 파라미터를 자동으로 넘겨주면 받아서 씀
-def index(request):
+def index(request): #ctx에 담아서 form 넘김
     ctx = {}
     if request.method=="GET":
         partner_form=PartnerForm()
@@ -60,3 +60,29 @@ def signup(request):
 def logout(request):
     auth_logout(request)
     return redirect("/partner/")
+
+def edit_info(request):
+    ctx = {}
+    # Article.objects.all() 같은 쿼리(DB에 질문 통해 data 가져옴)
+    if request.method=="GET":
+        partner_form=PartnerForm(instance=request.user.partner)
+        ctx.update({"form" : partner_form})
+    elif request.method=="POST":
+        partner_form=PartnerForm(
+            request.POST,
+            instance=request.user.partner
+        )
+        if partner_form.is_valid():
+            partner = partner_form.save(commit=False) # save의 commit은 db에 저장할지 묻는것
+            partner.user=request.user
+            partner.save()
+            return redirect("/partner/")
+# 저장 안하는 이유는? model에서는 user있는데 form에서 없기 때문에 user 집어넣어야 해서
+        else:
+            ctx.update({"form" : partner_form})
+
+    return render(request, "edit_info.html",ctx)
+
+def menu(request):
+    ctx={}
+    return render(request, "menu_list.html",ctx)
