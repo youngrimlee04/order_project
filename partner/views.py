@@ -5,7 +5,8 @@ from django.contrib.auth import (
 )
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-from .forms import PartnerForm
+from .forms import PartnerForm, MenuForm
+from .models import Menu
 
 # Create your views here.
 # 장고에서 views.py에서 사용하도록 request라는 파라미터를 자동으로 넘겨주면 받아서 씀
@@ -85,4 +86,55 @@ def edit_info(request):
 
 def menu(request):
     ctx={}
+
+    menu_list = Menu.objects.filter(partner = request.user.partner)
+    ctx.update({"menu_list":menu_list}) # 업데이트된 내용을 menu_list.html에서 사용가능
     return render(request, "menu_list.html",ctx)
+
+def menu_add(request):
+    ctx={}
+
+    if request.method=="GET":
+        form=MenuForm() #MenuForm 활성화시킴
+        ctx.update({"form":form}) #form키에 form 불러씀
+    elif request.method=="POST":
+        form=MenuForm(request.POST, request.FILES) #위와 다르게 파일 함께 저장한다는 의미로 request.FILES
+        if form.is_valid():
+            menu = form.save(commit=False) #메뉴 인스턴스 생성
+            menu.partner = request.user.partner
+            menu.save()
+            return redirect("/partner/menu/")
+        else: #에러시 저장 안하고 에러표시와 함께 처리
+            ctx.update({"form":form})
+
+    return render(request, "menu_add.html",ctx)
+
+
+def menu_detail(request, menu_id):
+# id값 알기 때문에 메뉴 넘길 수 있음, get은 item을 1개 가져옴
+    menu = Menu.objects.get(id=menu_id) # id가 menu_id인 menu를 가져와서
+    ctx = {"menu" : menu}
+# get, post 구분 안해도 되니 굳이 ctx.update() 안하고 menu를 위와 같은 방식으로 ctx에 넣어줄 수 있음
+    return render(request, "menu_detail.html",ctx)
+
+def menu_edit(request, menu_id):
+    ctx = {"replacement":"수정"}
+    menu = Menu.objects.get(id=menu_id)
+    if request.method=="GET":
+        form=MenuForm(instance=menu) #MenuForm 활성화시킴
+        ctx.update({"form":form}) #form키에 form 불러씀
+    elif request.method=="POST":
+        form=MenuForm(request.POST, request.FILES, instance=menu) #위와 다르게 파일 함께 저장한다는 의미로 request.FILES
+        if form.is_valid():
+            menu = form.save(commit=False) #메뉴 인스턴스 생성
+            menu.partner = request.user.partner
+            menu.save()
+            return redirect("/partner/menu/")
+        else: #에러시 저장 안하고 에러표시와 함께 처리
+            ctx.update({"form":form})
+    return render(request, "menu_add.html",ctx)
+
+def menu_delete(request, menu_id):
+    menu = Menu.objects.get(id=menu_id)
+    menu.delete()
+    return redirect("/partner/menu/") #템플릿 필요 없고 삭제 후 이 페이지로 보냄

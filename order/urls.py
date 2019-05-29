@@ -26,6 +26,15 @@ from django.contrib import admin
 # 달러 표시가 urls.py-partner와 달리 없는 건
 # 끝이 아니고 partner 뒤에 urls.py-partner다 이어진다
 urlpatterns = [
+    url(r'^', include('client.urls')),
     url(r'^partner/', include('partner.urls')),
     url(r'^admin/', admin.site.urls),
 ]
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+# 디버그 True는 settings 보면 알 수 있듯 현재 개발 중이라는 뜻
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

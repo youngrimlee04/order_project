@@ -16,3 +16,17 @@ class PartnerForm(ModelForm):
             "address": TextInput(attrs={"class":"form-control"}),
             "description": Textarea(attrs={"class":"form-control"}),
         }
+
+class MenuForm(ModelForm):
+    class Meta:
+        model=Menu
+        fields=(
+            "image",
+            "name",
+            "price",
+        )
+        widgets = {
+            # "image": TextInput(attrs={"class":"form-control"}),
+            "name": TextInput(attrs={"class":"form-control"}),
+            "price": TextInput(attrs={"class":"form-control"}),
+        }
