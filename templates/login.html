@@ -11,9 +11,15 @@
       class="form-control" placeholder="Username" required="" autofocus="">
     <input type="password" name="password"
       class="form-control" placeholder="Password" required="">
-    {{ error }}  
+    {{ error }}
     <button class="btn btn-lg btn-primary btn-block" type="submit">
-      Log in</button>
+      Log in
+    </button>
+    {% if is_client %}
+    <div class="text-center">
+      <a href="/partner/login/">업체용 로그인 하기</a>
+    </div>
+    {% endif %}
   </form>
 </div>
 {% endblock %}
