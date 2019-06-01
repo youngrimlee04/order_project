@@ -69,6 +69,7 @@ def logout(request):
     return redirect("/partner/")
 
 @login_required(login_url=URL_LOGIN)
+@user_passes_test(partner_group_check, login_url=URL_LOGIN)
 def edit_info(request):
     ctx = {}
     # Article.objects.all() 같은 쿼리(DB에 질문 통해 data 가져옴)
@@ -92,6 +93,7 @@ def edit_info(request):
     return render(request, "edit_info.html",ctx)
 
 @login_required(login_url=URL_LOGIN)
+@user_passes_test(partner_group_check, login_url=URL_LOGIN)
 def menu(request):
     ctx={}
     # if request.user.is_anonymous or request.user.partner is None:
@@ -123,6 +125,7 @@ def menu_add(request):
     return render(request, "menu_add.html",ctx)
 
 @login_required(login_url=URL_LOGIN)
+@user_passes_test(partner_group_check, login_url=URL_LOGIN)
 def menu_detail(request, menu_id):
 # id값 알기 때문에 메뉴 넘길 수 있음, get은 item을 1개 가져옴
     menu = Menu.objects.get(id=menu_id) # id가 menu_id인 menu를 가져와서
@@ -131,6 +134,7 @@ def menu_detail(request, menu_id):
     return render(request, "menu_detail.html",ctx)
 
 @login_required(login_url=URL_LOGIN)
+@user_passes_test(partner_group_check, login_url=URL_LOGIN)
 def menu_edit(request, menu_id):
     ctx = {"replacement":"수정"}
     menu = Menu.objects.get(id=menu_id)
@@ -149,6 +153,7 @@ def menu_edit(request, menu_id):
     return render(request, "menu_add.html",ctx)
 
 @login_required(login_url=URL_LOGIN)
+@user_passes_test(partner_group_check, login_url=URL_LOGIN)
 def menu_delete(request, menu_id):
     menu = Menu.objects.get(id=menu_id)
     menu.delete()
