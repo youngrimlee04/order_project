@@ -1,6 +1,6 @@
 from django.contrib.auth import (
     authenticate,
-    login as auth_login,
+    login as auth_login,    
 )
 from django.contrib.auth.models import User, Group
 from django.shortcuts import render, redirect

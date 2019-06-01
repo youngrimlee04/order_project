@@ -8,6 +8,7 @@ from django.contrib.auth.models import User, Group
 from django.shortcuts import render, redirect
 
 from client.views import common_login, common_signup
+from client.models import OrderItem
 from .forms import PartnerForm, MenuForm
 from .models import Menu
 
@@ -15,7 +16,7 @@ from .models import Menu
 
 URL_LOGIN = '/partner/login/'
 #여기서 user는 장고의 request처럼 장고에서 user_pasees_test에서 자동으로 넘겨준 user임
-def partner_group_check(user):
+def partner_group_check(user): #group은 name이라는 filed 가지므로 이 filed 체크해야 함
     return "partner" in [group.name for group in user.groups.all()]
 
 # Create your views here.
@@ -158,3 +159,17 @@ def menu_delete(request, menu_id):
     menu = Menu.objects.get(id=menu_id)
     menu.delete()
     return redirect("/partner/menu/") #템플릿 필요 없고 삭제 후 이 페이지로 보냄
+
+def order(request):
+    ctx = {}
+
+    menu_list = Menu.objects.filter(partner=request.user.partner)
+    item_list = []
+    for menu in menu_list:
+        item_list.extend([
+            item for item in OrderItem.objects.filter(menu=menu)
+        ])
+#앞에 menu는 클라이언트 모델 orderitem의 메뉴, 뒤의 menu는 위의 for문 안에 도는 menu
+    order_set = set([item.order for item in item_list]) #item 중 오더가 있는 리스트, set은 중복제거 집합
+    ctx.update({ "order_set":order_set }) #order_list_for_partner 템플릿으로 보내기
+    return render(request, "order_list_for_partner.html",ctx)
