@@ -6,18 +6,20 @@
     <h2>주문 현황</h2>
     <table class="table">
       <tr>
-        <th>고객 이름</td>
-        <th>주소</td>
-        <th>주문 메뉴</td>
-        <th>주문 수량</td>
+        <th>고객 이름</th>
+        <th>주소</th>
+        <th>주문 메뉴</th>
+        <th>주문 수량</th>
       </tr>
       {% for order in order_set %}
+        {% for item in order.items.all %}
       <tr>
         <td>{{ order.client.name }}</td>
         <td>{{ order.address }}</td>
-        <td>{{ order.items.orderitem.menu }}</td>
-        <td>{{ order.items.orderitem.count }}</td>
+        <td>{{ item.menu }}</td>
+        <td>{{ item.count }}</td>
       </tr>
+        {% endfor %}
       {% endfor %}
     </table>
   </div>

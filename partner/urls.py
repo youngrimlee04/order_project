@@ -19,5 +19,5 @@ urlpatterns = [
     url(r'^menu/(?P<menu_id>\d+)/$', menu_detail,name="menu_detail"),
     url(r'^menu/(?P<menu_id>\d+)/edit/$', menu_edit,name="menu_edit"),
     url(r'^menu/(?P<menu_id>\d+)/delete/$', menu_delete,name="menu_delete"),
-    url(r'^order/$', order,name="order"),
+    url(r'^order/$', order,name="order"), 
 ]
