@@ -1,6 +1,6 @@
 from django.contrib.auth import (
     authenticate,
-    login as auth_login,    
+    login as auth_login,
 )
 from django.contrib.auth.models import User, Group
 from django.shortcuts import render, redirect
@@ -9,7 +9,6 @@ from client.models import Order, OrderItem
 
 # Create your views here.
 def index(request):
-
     partner_list = Partner.objects.all()
     ctx = {
         "partner_list" :partner_list

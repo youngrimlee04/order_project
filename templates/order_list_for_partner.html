@@ -12,14 +12,12 @@
         <th>주문 수량</th>
       </tr>
       {% for order in order_set %}
-        {% for item in order.items.all %}
       <tr>
         <td>{{ order.client.name }}</td>
         <td>{{ order.address }}</td>
-        <td>{{ item.menu }}</td>
-        <td>{{ item.count }}</td>
+        <td>{% for item in order.items.all %}{{ item }}{% endfor %}</td>
+        <td>{{ order.items.all.count }}</td>
       </tr>
-        {% endfor %}
       {% endfor %}
     </table>
   </div>
